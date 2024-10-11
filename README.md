@@ -1,3 +1,9 @@
+# *`Please note that the theme is in a work in progress. Below is the description of my goal of this theme.`*
+
+---
+---
+---
+
 A ReactJS Starter Theme for WordPress headless sites
 ===================
 
