@@ -1,0 +1,18 @@
+{
+  "name": "vd-base-wp-theme",
+  "description": "Daniel Varga base wordpress theme",
+  "version": "0.0.1",
+  "repository": "github.com/vargavd",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jquery": "^3.5.5",
+    "beepbeep": "^1.2.2",
+    "browser-sync": "^2.29.3",
+    "npm-run-all": "^4.1.5"
+  },
+  "scripts": {
+    "typescript": "tsc -w",
+    "sync": "browser-sync start --proxy \"https://tesztnamegegyszer.test/\" --files \"**/*.css, **/*.php, **/*.js\"",
+    "startdev": "npm-run-all --parallel typescript sync"
+  }
+}
