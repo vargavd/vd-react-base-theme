@@ -27,3 +27,5 @@ include "inc/remove-default-styles.php";
 include "inc/remove-wp-version.php";
 
 include "inc/remove-admin-bar.php";
+
+include "inc/disable-404-status.php";

@@ -21,7 +21,7 @@ The main idea is to use the WordPress installation for the database and dashboar
 - Default WP scripts and styles are not loaded.
 - Only css that the backend loads is the [normalize.css](https://necolas.github.io/normalize.css/)
 - Everyting is redirected to '/'
-- Disabled Admin Bar, Gutenberg Editor, XML-RPC and RSS
+- Disabled Admin Bar, Gutenberg Editor, 404 status, XML-RPC and RSS
 
 ## Installation
 

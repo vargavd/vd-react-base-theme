@@ -11,14 +11,20 @@
  *
  * @package VD_base_Theme
  */
-
-get_header();
 ?>
 
-	<div id="app">
-    <!-- React App will be injected here -->
-  </div>
-
-<?php
-// get_sidebar();
-get_footer();
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php wp_head(); ?>
+</head>
+<body>
+    <div id="app">
+      <!-- React App will be injected here -->
+       Javascript is not enabled or loaded properly.
+    </div>
+    <?php wp_footer(); ?>
+</body>
+</html>
