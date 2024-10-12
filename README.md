@@ -23,6 +23,11 @@ The main idea is to use the WordPress installation for the database and dashboar
 - Everyting is redirected to '/'
 - Disabled Admin Bar, Gutenberg Editor, XML-RPC and RSS
 
+## Installation
+
+- Activate the Theme
+- `Plain` permalinks settings will not work, change to anything else
+
 ## Included Example
 As an example, there is an Map solution with filterable points of interests, built with Azure Maps. 
 It has:
