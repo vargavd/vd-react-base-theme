@@ -17,8 +17,8 @@ module.exports = {
         test: /\.(tsx|ts|js)$/,
         loader: "string-replace-loader",
         options: {
-          search: /GOOGLE_MAPS_API_KEY/g,
-          replace: process.env.GOOGLE_MAPS_API_KEY,
+          search: /MAPBOX_ACCESS_TOKEN/g,
+          replace: process.env.MAPBOX_ACCESS_TOKEN,
         },
       },
       {

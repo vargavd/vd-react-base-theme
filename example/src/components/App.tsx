@@ -3,14 +3,13 @@ import * as React from "react";
 
 // custom components
 import Header from "./header/Header";
+import Map from "./map/Map";
 
 const App: React.FC = () => {
   return (
     <>
       <Header />
-      <div style={{ height: "100vh", width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        Map Placeholder
-      </div>
+      <Map />
     </>
   );
 };
