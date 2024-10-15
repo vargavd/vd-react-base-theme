@@ -1,6 +1,5 @@
 // react imports
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 
 // main styles
 import "./styles.scss";
@@ -8,4 +7,4 @@ import "./styles.scss";
 // main component
 import App from './components/App';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+createRoot(document.getElementById('app')).render(<App />);

@@ -5,20 +5,11 @@ import * as React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestion, faCheck, faList } from "@fortawesome/free-solid-svg-icons";
 
-// state imports
-import { useSelector } from "react-redux";
-import { store } from "../../store/store";
-import {
-  addTaxonomyAFilter, addTaxonomyBFilter, addTaxonomyCFilter, addTaxonomyDFilter,
-  removeTaxonomyAFilter, removeTaxonomyBFilter, removeTaxonomyCFilter, removeTaxonomyDFilter
-} from "../../store/actions";
-
 // styles
 import "./Header.scss";
 
 // data
 import { locationInfos } from "../../data";
-
 
 // #region [colored] process data
 const taxonomyATerms: string[] = [];
@@ -54,50 +45,13 @@ locationInfos.forEach(locationInfo => {
 
 
 const Header: React.FC = () => {
-  // states
-  const selectedTaxonomyATerms = useSelector((state: any) => state.taxonomyAFilters);
-  const selectedTaxonomyBTerms = useSelector((state: any) => state.taxonomyBFilters);
-  const selectedTaxonomyCTerms = useSelector((state: any) => state.taxonomyCFilters);
-  const selectedTaxonomyDTerms = useSelector((state: any) => state.taxonomyDFilters);
-
-  // events
-  const getClickHandlerOnTaxonomyA = (term: string) => (e: React.MouseEvent) => {
-    if (selectedTaxonomyATerms.indexOf(term) !== -1) {
-      store.dispatch(removeTaxonomyAFilter(term));
-    } else {
-      store.dispatch(addTaxonomyAFilter(term));
-    }
-
-  };
-  const getClickHandlerOnTaxonomyB = (term: string) => (e: React.MouseEvent) => {
-    if (selectedTaxonomyBTerms.indexOf(term) !== -1) {
-      store.dispatch(removeTaxonomyBFilter(term));
-    } else {
-      store.dispatch(addTaxonomyBFilter(term));
-    }
-  };
-  const getClickHandlerOnTaxonomyC = (term: string) => (e: React.MouseEvent) => {
-    if (selectedTaxonomyCTerms.indexOf(term) !== -1) {
-      store.dispatch(removeTaxonomyCFilter(term));
-    } else {
-      store.dispatch(addTaxonomyCFilter(term));
-    }
-  };
-  const getClickHandlerOnTaxonomyD = (term: string) => (e: React.MouseEvent) => {
-    if (selectedTaxonomyDTerms.indexOf(term) !== -1) {
-      store.dispatch(removeTaxonomyDFilter(term));
-    } else {
-      store.dispatch(addTaxonomyDFilter(term));
-    }
-  };
-
   // helper funcs
   const renderFilter = (selectedFilters: string[], onClickEvent: (term: string) => (e: React.MouseEvent) => void) => (term: string) => {
-    const linkClass = (selectedFilters.indexOf(term) !== -1) ? 'selected' : '';
+    // const linkClass = (selectedFilters.indexOf(term) !== -1) ? 'selected' : '';
 
     return (
       <li key={term} onClick={onClickEvent(term)}>
-        <a className={linkClass}>
+        <a className={Math.random() > 0.5 ? 'selected' : ''}>
           <FontAwesomeIcon icon={faCheck} />
           {term}
         </a>
@@ -116,7 +70,7 @@ const Header: React.FC = () => {
             <span>Taxonomy A Filter</span>
           </div>
           <ul id="taxonomy-a-filter">
-            {taxonomyATerms.map(renderFilter(selectedTaxonomyATerms, getClickHandlerOnTaxonomyA))}
+            {taxonomyATerms.map(renderFilter([], () => e => console.log(e)))}
           </ul>
         </div>
 
@@ -126,7 +80,7 @@ const Header: React.FC = () => {
             <span>Taxonomy B Filter</span>
           </div>
           <ul id="taxonomy-b-filter">
-            {taxonomyBTerms.map(renderFilter(selectedTaxonomyBTerms, getClickHandlerOnTaxonomyB))}
+            {taxonomyBTerms.map(renderFilter([], () => e => console.log(e)))}
           </ul>
         </div>
 
@@ -136,7 +90,7 @@ const Header: React.FC = () => {
             <span>Taxonomy E Filter</span>
           </div>
           <ul id="taxonomy-e-filter">
-            {taxonomyCTerms.map(renderFilter(selectedTaxonomyCTerms, getClickHandlerOnTaxonomyC))}
+            {taxonomyCTerms.map(renderFilter([], () => e => console.log(e)))}
           </ul>
         </div>
 
@@ -146,7 +100,7 @@ const Header: React.FC = () => {
             <span>Taxonomy F Filter</span>
           </div>
           <ul id="taxonomy-f-filter">
-            {taxonomyDTerms.map(renderFilter(selectedTaxonomyDTerms, getClickHandlerOnTaxonomyD))}
+            {taxonomyDTerms.map(renderFilter([], () => e => console.log(e)))}
           </ul>
         </div>
       </div>
