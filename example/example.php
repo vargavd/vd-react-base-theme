@@ -1,15 +1,9 @@
 <?php
 
-add_action('wp_enqueue_scripts', function () {
-  // MAPBOX
-  wp_enqueue_style('mapbox-style', 'https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css', NULL);
-  wp_enqueue_script('mapbox-script', 'https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js', NULL, NULL, true);
+include "inc/location-content-type.php";
 
-  $script_path = '/example/dist/bundle.js';
+include "inc/enqueue-scripts-styles.php";
 
-  wp_enqueue_script('vd-react-base-example-script', get_stylesheet_directory_uri() . $script_path, array('mapbox-script'), filemtime(get_stylesheet_directory() . $script_path), true);
-  wp_localize_script('vd-react-base-example-script', 'vdReactBaseInfos', array(
-      'baseUrl' => get_home_url()
-  ));
-});
+include "inc/import-locations-rest-endpoint.php";
 
+include "inc/location-meta-box.php";
