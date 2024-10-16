@@ -1,12 +1,18 @@
 // react imports
 import { useEffect } from "react";
 
+// markers data imports
+import { locationInfos } from "../../data";
+
 // styles
 import "./Map.scss";
 
 declare var mapboxgl: any;
 
 const Map: React.FC = () => {
+  const markers = locationInfos.map(li => ({ lngLat: [li.lng, li.lat], title: li.title, text: li.text }));
+
+  console.log(markers);
 
   useEffect(() => {
     mapboxgl.accessToken = 'MAPBOX_ACCESS_TOKEN';
@@ -26,6 +32,17 @@ const Map: React.FC = () => {
 
     map.on('style.load', () => {
       map.setFog({}); // Set the default atmosphere style
+    });
+
+    markers.slice(0, 10).forEach((marker) => {
+      const popup = new mapboxgl.Popup({ offset: 30 }).setText(
+        `${marker.title}: ${marker.text}`
+      );
+
+      new mapboxgl.Marker()
+        .setLngLat(marker.lngLat)
+        .setPopup(popup)
+        .addTo(map);
     });
   }, []);
 
