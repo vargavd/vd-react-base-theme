@@ -56,7 +56,7 @@ locationInfos.forEach(locationInfo => {
 
 
 const Header: React.FC = () => {
-  const [startLocationImports, setStartLocationImports] = useState(true);
+  const [startLocationImports, setStartLocationImports] = useState(false);
 
   const selectedTaxonomyAFilters = useSelector((state: RootState) => state.selectedTaxonomyA);
   const selectedTaxonomyBFilters = useSelector((state: RootState) => state.selectedTaxonomyB);
