@@ -1,4 +1,4 @@
-export const locationInfos: {
+export type LocationInfo = {
   title: string;
   image: string;
   introText: string;
@@ -11,7 +11,9 @@ export const locationInfos: {
   categories: string[];
   terms: string[];
   text: string;
-}[] = [
+};
+
+export const locationInfos: LocationInfo[] = [
   {
     title: "Afghanistan",
     image: "/wp-content/uploads/2022/02/panel-sample-img.png",

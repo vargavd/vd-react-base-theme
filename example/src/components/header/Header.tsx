@@ -1,9 +1,10 @@
 // react imports
 import * as React from "react";
+import { useState } from "react";
 
 // misc imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestion, faCheck, faList } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faList, faFileImport } from "@fortawesome/free-solid-svg-icons";
 
 // store imports
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,6 +20,7 @@ import "./Header.scss";
 
 // data
 import { locationInfos } from "../../data";
+import ImportLocationsPopup from "../import-locations-popup/ImportLocationsPopup";
 
 
 // load data
@@ -54,6 +56,8 @@ locationInfos.forEach(locationInfo => {
 
 
 const Header: React.FC = () => {
+  const [startLocationImports, setStartLocationImports] = useState(true);
+
   const selectedTaxonomyAFilters = useSelector((state: RootState) => state.selectedTaxonomyA);
   const selectedTaxonomyBFilters = useSelector((state: RootState) => state.selectedTaxonomyB);
   const selectedTaxonomyCFilters = useSelector((state: RootState) => state.selectedTaxonomyC);
@@ -77,57 +81,64 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="top-bar">
-      <h1>Locations</h1>
+    <>
+      <header className="top-bar">
+        <h1>Locations</h1>
 
-      <div className="top-bar__filters">
-        <div className="top-bar__filter noselect">
-          <div className="top-bar__filter-title">
-            <FontAwesomeIcon icon={faList} />
-            <span>Taxonomy A Filter</span>
+        <div className="top-bar__filters">
+          <div className="top-bar__filter noselect">
+            <div className="top-bar__filter-title">
+              <FontAwesomeIcon icon={faList} />
+              <span>Taxonomy A Filter</span>
+            </div>
+            <ul id="taxonomy-a-filter">
+              {taxonomyATerms.map(renderFilter(selectedTaxonomyAFilters, taxonomyAActions.addTaxonomyAFilter, taxonomyAActions.removeTaxonomyAFilter))}
+            </ul>
           </div>
-          <ul id="taxonomy-a-filter">
-            {taxonomyATerms.map(renderFilter(selectedTaxonomyAFilters, taxonomyAActions.addTaxonomyAFilter, taxonomyAActions.removeTaxonomyAFilter))}
-          </ul>
+
+          <div className="top-bar__filter noselect">
+            <div className="top-bar__filter-title">
+              <FontAwesomeIcon icon={faList} />
+              <span>Taxonomy B Filter</span>
+            </div>
+            <ul id="taxonomy-b-filter">
+              {taxonomyBTerms.map(renderFilter(selectedTaxonomyBFilters, taxonomyBActions.addTaxonomyBFilter, taxonomyBActions.removeTaxonomyBFilter))}
+            </ul>
+          </div>
+
+          <div className="top-bar__filter noselect">
+            <div className="top-bar__filter-title">
+              <FontAwesomeIcon icon={faList} />
+              <span>Taxonomy E Filter</span>
+            </div>
+            <ul id="taxonomy-e-filter">
+              {taxonomyCTerms.map(renderFilter(selectedTaxonomyCFilters, taxonomyCActions.addTaxonomyCFilter, taxonomyCActions.removeTaxonomyCFilter))}
+            </ul>
+          </div>
+
+          <div className="top-bar__filter noselect">
+            <div className="top-bar__filter-title">
+              <FontAwesomeIcon icon={faList} />
+              <span>Taxonomy F Filter</span>
+            </div>
+            <ul id="taxonomy-f-filter">
+              {taxonomyDTerms.map(renderFilter(selectedTaxonomyDFilters, taxonomyDActions.addTaxonomyDFilter, taxonomyDActions.removeTaxonomyDFilter))}
+            </ul>
+          </div>
         </div>
 
-        <div className="top-bar__filter noselect">
-          <div className="top-bar__filter-title">
-            <FontAwesomeIcon icon={faList} />
-            <span>Taxonomy B Filter</span>
-          </div>
-          <ul id="taxonomy-b-filter">
-            {taxonomyBTerms.map(renderFilter(selectedTaxonomyBFilters, taxonomyBActions.addTaxonomyBFilter, taxonomyBActions.removeTaxonomyBFilter))}
-          </ul>
+        <div className="top-bar__links">
+          <a className="top-bar_link__import" onClick={() => setStartLocationImports(true)}>
+            <FontAwesomeIcon icon={faFileImport} />
+            <span>Import Locations</span>
+          </a>
         </div>
+      </header>
 
-        <div className="top-bar__filter noselect">
-          <div className="top-bar__filter-title">
-            <FontAwesomeIcon icon={faList} />
-            <span>Taxonomy E Filter</span>
-          </div>
-          <ul id="taxonomy-e-filter">
-            {taxonomyCTerms.map(renderFilter(selectedTaxonomyCFilters, taxonomyCActions.addTaxonomyCFilter, taxonomyCActions.removeTaxonomyCFilter))}
-          </ul>
-        </div>
-
-        <div className="top-bar__filter noselect">
-          <div className="top-bar__filter-title">
-            <FontAwesomeIcon icon={faList} />
-            <span>Taxonomy F Filter</span>
-          </div>
-          <ul id="taxonomy-f-filter">
-            {taxonomyDTerms.map(renderFilter(selectedTaxonomyDFilters, taxonomyDActions.addTaxonomyDFilter, taxonomyDActions.removeTaxonomyDFilter))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="top-bar__links">
-        <a className="top-bar_link__description">
-          <FontAwesomeIcon icon={faQuestion} />
-        </a>
-      </div>
-    </header>
+      {startLocationImports && (
+        <ImportLocationsPopup onClose={() => setStartLocationImports(false)} />
+      )}
+    </>
   );
 };
 
