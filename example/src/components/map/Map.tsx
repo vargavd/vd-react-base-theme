@@ -14,13 +14,15 @@ const Map: React.FC = () => {
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v9',
-      projection: 'globe', // Display the map as a globe, since satellite-v9 defaults to Mercator
       zoom: 1,
-      center: [30, 15]
+      center: [30, 15],
+      pitchWithRotate: false,
+      dragRotate: false,
+      touchZoomRotate: false
     });
 
     map.addControl(new mapboxgl.NavigationControl());
-    map.scrollZoom.disable();
+    // map.scrollZoom.disable();
 
     map.on('style.load', () => {
       map.setFog({}); // Set the default atmosphere style
