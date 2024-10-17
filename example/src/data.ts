@@ -595,7 +595,7 @@ export const locationInfos: LocationInfo[] = [
     text: "Eos praesent incorrupte dissentiunt ne, modus evertitur disputando vel ex, te sit facilisi quaerendum.",
   },
   {
-    title: "Sudan (Darfur)",
+    title: "Sudan Darfur",
     image: "/wp-content/uploads/2022/02/panel-sample-img.png",
     introText:
       "Lorem ipsum dolor sit amet, in has natum novum civibus, te vis tota civibus. Cu oblique aliquando assueverit nec. Quo aliquip atomorum efficiantur ea, ne has porro mollis eripuit. Mea ne magna offendit perfecto.",

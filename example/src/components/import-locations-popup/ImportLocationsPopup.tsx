@@ -1,5 +1,5 @@
 // react imports
-import * as React from "react";
+import { useState, useEffect } from "react";
 
 // misc imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,73 +11,70 @@ import "./ImportLocationsPopup.scss";
 // data import
 import { LocationInfo, locationInfos } from "../../data";
 
+type MessageType = 'SUCCESS' | 'PENDING' | 'WARNING' | 'ERROR';
+
+type Message = {
+  text: string,
+  state: MessageType
+};
 
 const ImportLocationsPopup = ({ onClose }: { onClose: () => void }) => {
-  const [messages, setMessages] = React.useState<{
-    text: string,
-    state: 'SUCCESS' | 'PENDING' | 'ERROR'
-  }[]>([
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-    // { text: 'Importing Location 1...', state: 'SUCCESS' },
-    // { text: 'Importing Location 2...', state: 'PENDING' },
-    // { text: 'Importing Location 3...', state: 'ERROR' },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   // helper funcs
+  const addToLastMessage = (state: MessageType, text?: string | string[]) => {
+    setMessages(messages => {
+      const newMessages = [...messages];
+
+      newMessages[newMessages.length - 1].state = state;
+      newMessages[newMessages.length - 1].text += ` - ${state}` + (text ? `: ${text}` : '');
+
+      return newMessages;
+    });
+  };
   const importLocation = async (locationInfo: LocationInfo) => {
     setMessages((messages) => [
       ...messages,
       { text: `Importing ${locationInfo.title}...`, state: 'PENDING' },
     ]);
 
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setMessages(messages => {
-          const newMessages = [...messages];
-          const lastMessage = newMessages[newMessages.length - 1];
-          newMessages[newMessages.length - 1] = {
-            text: `${lastMessage.text} Done!`,
-            state: 'SUCCESS',
-          };
-          return newMessages;
-        });
-        resolve();
-      }, 2000);
+    const res = await fetch(`${location.origin}/wp-json/vd-react-base-theme/v1/import-location`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ location: locationInfo }),
     });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      addToLastMessage('ERROR', data.message || res.statusText);
+      console.error('result:', res);
+      console.error('data:', data);
+      return false;
+    }
+
+    if (data.message) {
+      addToLastMessage('WARNING', (`: ${data.message}`));
+
+      return data;
+    }
+
+    addToLastMessage('SUCCESS');
+    return data;
   };
   const importLocations = async () => {
-    for (const locationInfo of locationInfos.slice(0, 10)) {
-      await importLocation(locationInfo);
+    for (const locationInfo of locationInfos) {
+      const result = await importLocation(locationInfo);
+
+      if (!result) {
+        break;
+      }
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     importLocations();
   }, []);
 

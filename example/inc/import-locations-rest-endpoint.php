@@ -1,121 +1,88 @@
 <?php
 
+function add_taxonomy_to_location($term_name, $taxonomy, $post_id) {
+  $term_name = sanitize_text_field($term_name);
+  $taxonomy = sanitize_text_field($taxonomy);
+  $post_id = intval($post_id);
+
+  $term = get_term_by('name', $term_name, $taxonomy);
+
+  if (!$term) {
+    $term_data = wp_insert_term($term_name, $taxonomy);
+    $term = get_term_by('id', $term_data['term_id'], $taxonomy);
+  }
+
+  wp_set_object_terms($post_id, array(intval($term->term_id)), $taxonomy, true);
+}
+
 function vd_react_base_import_location($req) {
-  // $response = array(
-  //   'status' => 'success',
-  //   'errors' => array(),
-  //   'messages' => array(),
-  //   'categories' => array(),
-  //   'tags' => array()
-  // );
-
-  // function add_error(&$response, $error_message) {
-  //   array_push($response['errors'], $error_message);
-  //   $response['status'] = 'error';
-  // }
+  $response = array(
+    'error' => '',
+    'message' => ''
+  );
   
-  // $project = $req['project'];
+  $location = $req['location'];
 
-  // $title = $project['title'];
-  // $slug = $project['url'];
-  // $project_categories = $project['project_categories'];
-  // $project_tags = $project['project_tags'];
-  // $pubDate = $project['pubDate'];
+  $title = sanitize_text_field($location['title']);
+  $text = sanitize_text_field($location['introText']);
+  $taxonomyATerms = $location['taxonomyATerms'];
+  $taxonomyBTerms = $location['taxonomyBTerms'];
+  $taxonomyCTerms = $location['taxonomyCTerms'];
+  $taxonomyDTerms = $location['taxonomyDTerms'];
+  $lat = sanitize_text_field($location['lat']);
+  $lng = sanitize_text_field($location['lng']);
 
-  // // return $project;
+  $slug = strtolower(str_replace(' ', '-', $title));
 
-  // // CHECK IF POST EXISTS
-  // if (get_page_by_path($slug, OBJECT, 'project')) {
-  //   array_push($response['messages'], 'Post already exists with this: ' . $slug);
-  //   return $response;
-  // }
+  // CHECK IF POST EXISTS
+  if (get_page_by_path($slug, OBJECT, 'location')) {
+    $response['message'] = "Location already exists with this slug '$slug'";
+    return $response;
+  }
 
-  // // META INFOS
-  // $meta_infos = sivananda_get_meta_information("https://sivananda.hu/project/" . $slug);
+  // POST CREATION
+  $created_post = wp_insert_post(array(
+    'post_title' => $title,
+    'post_name' => $slug,
+    'post_content' => $text,
+    'post_status' => 'publish',
+    'post_type' => 'location'
+  ));
 
-  // // IMAGE UPLOAD
-  // $attachment_id = null;
+  if (is_wp_error($created_post)) {
+    $response['message'] = $created_post->get_error_message();
+    return new WP_REST_Response($response, 500);
+  }
 
-  // if (array_key_exists('image', $meta_infos)) {
-  //   $attachment_id = sivananda_download_image_to_media_library($meta_infos['image']);
-  
-  //   if (is_wp_error($attachment_id)) {
-  //     add_error($response, 'Error in adding image to media library: ' . $attachment_id->get_error_message());
-  //     return $response;
-  //   }
-  // } else {
-  //   array_push($response['messages'], "No OG Image found for '$slug'.");
-  //   // return $response; // No need to return, we can still create the post without image
-  // }
+  // ADD LATITUDE/LONGITUDE
+  update_post_meta($created_post, '_latitude', $lat);
+  update_post_meta($created_post, '_longitude', $lng);
 
-  // // POST CREATION
-  // $post_id = wp_insert_post(array(
-  //   'post_title' => $title,
-  //   'post_name' => $slug,
-  //   'post_content' => '',
-  //   'post_status' => 'publish',
-  //   'post_date' => $pubDate,
-  //   'post_type' => 'project'
-  // ));
+  // TAXONOMY A TERMS
+  if (is_array($taxonomyATerms)) {
+    foreach ($taxonomyATerms as $term) {
+      add_taxonomy_to_location(sanitize_text_field($term), 'location_taxonomy_A', $created_post);
+    }
+  }
 
-  // if (is_wp_error($post_id)) {
-  //   add_error($response, 'Error in creating project: ' . $post_id->get_error_message());
-  //   return $response;
-  // }
+  // TAXONOMY B TERMS
+  foreach ($taxonomyBTerms as $term) {
+    add_taxonomy_to_location($term, 'location_taxonomy_B', $created_post);
+  }
 
-  // // CATEGORIES
-  // foreach ($project_categories as $category) {
-  //   $category_name = $category['label'];
-  //   $category_slug = $category['slug'];
-  //   $term = get_term_by('slug', $category_slug, 'project_category');
-    
-  //   if (!$term) {
-  //     array_push($response['messages'], 'Did not find category, needed to be added: ' . $category_slug);
-  //     $term_data = wp_insert_term($category_name, 'project_category');
+  // TAXONOMY C TERMS
+  foreach ($taxonomyCTerms as $term) {
+    add_taxonomy_to_location($term, 'location_taxonomy_C', $created_post);
+  }
 
-  //     $term = get_term($term_data['term_id'], 'project_category');
-  //   }
+  // TAXONOMY D TERMS
+  foreach ($taxonomyDTerms as $term) {
+    add_taxonomy_to_location($term, 'location_taxonomy_D', $created_post);
+  }
 
-  //   wp_set_object_terms($post_id, array(intval($term->term_id)), 'project_category', true);
-  // }
+  $response['location'] = $created_post;
 
-  // // TAGS
-  // foreach ($project_tags as $tag) {
-  //   $tag_name = $tag['label'];
-  //   $tag_slug = $tag['slug'];
-  //   $term = get_term_by('slug', $tag_slug, 'project_tag');
-    
-  //   if (!$term) {
-  //     array_push($response['messages'], 'Did not find tag, needed to be added: ' . $tag_slug);
-  //     $term_data = wp_insert_term($tag_name, 'project_tag');
-
-  //     $term = get_term($term_data['term_id'], 'project_tag');
-  //   }
-
-  //   wp_set_object_terms($post_id, array(intval($term->term_id)), 'project_tag', true);
-  // }
-
-  // // ADD ATTACHMENT TO POST
-  // if (!is_wp_error($attachment_id)) {
-  //   set_post_thumbnail($post_id, $attachment_id);
-  // }
-
-  // // ADD EXCERPT
-  // if (array_key_exists('description', $meta_infos)) {
-  //   $excerpt = $meta_infos['description'];
-  //   $excerpt = strip_tags($excerpt);
-  //   $excerpt = wp_strip_all_tags($excerpt);
-
-  //   wp_update_post(array(
-  //     'ID' => $post_id,
-  //     'post_excerpt' => $excerpt
-  //   ));
-  // }
-
-
-  // $response['project'] = $project;
-
-  // return $response;
+  return new WP_REST_Response($response, 200);
 }
 
 add_action('rest_api_init', function () {
