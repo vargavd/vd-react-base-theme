@@ -23,6 +23,7 @@ The main idea is to use the WordPress installation for the database and dashboar
 - Only css that the backend loads is the [normalize.css](https://necolas.github.io/normalize.css/)
 - Everyting is redirected to '/'
 - Disabled Admin Bar, Gutenberg Editor, 404 status, XML-RPC and RSS
+- Added a `vd_react_base_app_content` custom filter, so plugins can render anything inside the `#app` container.
 
 ## Installation
 

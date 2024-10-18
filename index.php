@@ -22,8 +22,7 @@
 </head>
 <body>
     <div id="app">
-      <!-- React App will be injected here -->
-       Javascript is not enabled or loaded properly.
+      <?=apply_filters('vd_react_base_app_content', 'Javascript is not enabled and/or the webapplication is not loaded properly.')?>
     </div>
     <?php wp_footer(); ?>
 </body>
