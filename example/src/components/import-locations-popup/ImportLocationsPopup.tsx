@@ -18,7 +18,8 @@ type Message = {
   state: MessageType
 };
 
-const ImportLocationsPopup = ({ onClose }: { onClose: () => void }) => {
+const ImportLocationsPopup = () => {
+  const [importStarted, setImportStarted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
   // helper funcs
@@ -65,45 +66,84 @@ const ImportLocationsPopup = ({ onClose }: { onClose: () => void }) => {
     return data;
   };
   const importLocations = async () => {
+    let allSuccess = true;
+
     for (const locationInfo of locationInfos) {
       const result = await importLocation(locationInfo);
 
       if (!result) {
+        allSuccess = false;
         break;
       }
+    }
+
+    if (allSuccess) {
+      setMessages((messages) => [
+        ...messages,
+        { text: `${locationInfos.length} number of locations are imported successfully..`, state: 'SUCCESS' },
+        { text: 'Map reload in .... 3', state: 'WARNING' },
+      ]);
+
+      let count = 3;
+      let reloadIntervalId = setInterval(() => {
+        count -= 1;
+
+        if (count === 0) {
+          clearInterval(reloadIntervalId);
+          location.reload();
+        }
+
+        setMessages((messages) => [
+          ...messages.slice(0, messages.length - 1),
+          { text: `Map reload in .... ${count}`, state: 'WARNING' },
+        ]);
+      }, 1000);
     }
   };
 
   useEffect(() => {
-    importLocations();
-  }, []);
+    if (importStarted) {
+      importLocations();
+    }
+  }, [importStarted]);
 
   return (
     <div className="overlay">
       <div className="popup">
-        <button
-          className="close-button"
-          onClick={onClose}
-        >
-          &times;
-        </button>
         <div className="popup-inner">
-          {messages.map((message, index) => (
-            <div
-              className={`message ${message.state.toLowerCase()}`}
-              key={index}
-            >
-              {message.text}
+          {importStarted && (
+            <div className="message-list">
+              {messages.map((message, index) => (
+                <div
+                  className={`message ${message.state.toLowerCase()}`}
+                  key={index}
+                >
+                  {message.text}
 
-              {message.state === 'PENDING' && (
-                <FontAwesomeIcon
-                  style={{ position: 'relative', top: '4px', marginLeft: '5px' }}
-                  icon={faSpinner}
-                  spin
-                />
-              )}
+                  {message.state === 'PENDING' && (
+                    <FontAwesomeIcon
+                      style={{ position: 'relative', top: '4px', marginLeft: '5px' }}
+                      icon={faSpinner}
+                      spin
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
+          )}
+          {!importStarted && (
+            <>
+              <p>There are no locations in WordPress.</p>
+              <p>
+                <button
+                  className="import-button"
+                  onClick={() => setImportStarted(true)}
+                >
+                  Import Sample Data
+                </button>
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>

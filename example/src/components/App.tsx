@@ -1,35 +1,57 @@
 // react imports
-import * as React from "react";
+import { useState } from "react";
+
+// misc imports
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 // redux imports
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { useGetLocationsQuery } from "../store/slices/LocationsSlice";
 
 // custom components
 import Header from "./header/Header";
 import Map from "./map/Map";
-import { useGetLocationsQuery } from "../store/slices/LocationsSlice";
+import ImportLocationsPopup from "./import-locations-popup/ImportLocationsPopup";
 
 
 const App: React.FC = () => {
-  const selectedTaxonomyAFilters = useSelector((state: RootState) => state.selectedTaxonomyA);
-  const selectedTaxonomyBFilters = useSelector((state: RootState) => state.selectedTaxonomyB);
-  const selectedTaxonomyCFilters = useSelector((state: RootState) => state.selectedTaxonomyC);
-  const selectedTaxonomyDFilters = useSelector((state: RootState) => state.selectedTaxonomyD);
+  const [firstTimeLoad, setFirstTimeLoad] = useState(true);
 
-  const { data: posts, error, isLoading } = useGetLocationsQuery({
-    taxonomy_A_terms: selectedTaxonomyAFilters,
-    taxonomy_B_terms: selectedTaxonomyBFilters,
-    taxonomy_C_terms: selectedTaxonomyCFilters,
-    taxonomy_D_terms: selectedTaxonomyDFilters
+  const { data: locations, error, isLoading: locationsLoading } = useGetLocationsQuery({
+    taxonomy_A_terms: [],
+    taxonomy_B_terms: [],
+    taxonomy_C_terms: [],
+    taxonomy_D_terms: []
   });
 
-  console.log(posts, isLoading);
+  if (!locationsLoading && firstTimeLoad) {
+    setFirstTimeLoad(false);
+  }
 
   return (
     <>
-      <Header />
-      <Map />
+      {/* LOADING LOCATIONS */}
+      {firstTimeLoad && (
+        <FontAwesomeIcon
+          icon={faSpinner}
+          size="2xl"
+          style={{ margin: '45vh auto 0', display: 'block' }}
+          spin
+        />
+      )}
+
+      {/* THERE ARE NO LOCATIONS */}
+      {!firstTimeLoad && !locations?.length && (
+        <ImportLocationsPopup />
+      )}
+
+      {/* LOCATIONS LOADED */}
+      {!firstTimeLoad && !!locations?.length && (
+        <>
+          <Header />
+          <Map />
+        </>
+      )}
     </>
   );
 };

@@ -56,8 +56,6 @@ locationInfos.forEach(locationInfo => {
 
 
 const Header: React.FC = () => {
-  const [startLocationImports, setStartLocationImports] = useState(false);
-
   const selectedTaxonomyAFilters = useSelector((state: RootState) => state.selectedTaxonomyA);
   const selectedTaxonomyBFilters = useSelector((state: RootState) => state.selectedTaxonomyB);
   const selectedTaxonomyCFilters = useSelector((state: RootState) => state.selectedTaxonomyC);
@@ -128,16 +126,12 @@ const Header: React.FC = () => {
         </div>
 
         <div className="top-bar__links">
-          <a className="top-bar_link__import" onClick={() => setStartLocationImports(true)}>
+          <a className="top-bar_link__import" onClick={() => console.log('dsadasd')}>
             <FontAwesomeIcon icon={faFileImport} />
             <span>Import Locations</span>
           </a>
         </div>
       </header>
-
-      {startLocationImports && (
-        <ImportLocationsPopup onClose={() => setStartLocationImports(false)} />
-      )}
     </>
   );
 };
