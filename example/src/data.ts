@@ -678,3 +678,13 @@ export const locationInfos: LocationInfo[] = [
     text: "Eos praesent incorrupte dissentiunt ne, modus evertitur disputando vel ex, te sit facilisi quaerendum.",
   },
 ];
+
+export type LocationFromRestApi = {
+  id: string,
+  title: {
+    rendered: string
+  },
+  content: {
+    rendered: string
+  }
+}

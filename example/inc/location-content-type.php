@@ -27,6 +27,7 @@ add_action( 'init', function () {
       'hierarchical'          => true,
       'show_ui'               => true,
       'show_admin_column'     => true,
+      'show_in_rest'          => true,
       //'update_count_callback' => '_update_post_term_count',
       'query_var'             => true,
       'rewrite'               => array( 'slug' => "location_$letter" ),

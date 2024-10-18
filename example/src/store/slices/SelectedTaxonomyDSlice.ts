@@ -1,4 +1,4 @@
-import getTaxonomyFilterSlice from "./getTaxonomyFilterSlice";
+import getTaxonomyFilterSlice from "./helper/getTaxonomyFilterSlice";
 
 const sliceName = 'selectedTaxonomyD';
 const addReducerName = 'addTaxonomyDFilter';
