@@ -21,9 +21,8 @@
     <?php wp_head(); ?>
 </head>
 <body>
-    <div id="app">
-      <?=apply_filters('vd_react_base_app_content', 'Javascript is not enabled and/or the webapplication is not loaded properly.')?>
-    </div>
+    <?=apply_filters('vd_react_base_app_content', 'Javascript is not enabled and/or the webapplication is not loaded properly.')?>
+    
     <?php wp_footer(); ?>
 </body>
 </html>
