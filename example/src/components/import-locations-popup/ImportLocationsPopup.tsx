@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 // misc imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import GeneralPopup from "../general-popup/GeneralPopup";
 
 // style import
 import "./ImportLocationsPopup.scss";
@@ -38,6 +39,14 @@ const ImportLocationsPopup = () => {
       ...messages,
       { text: `Importing ${locationInfo.title}...`, state: 'PENDING' },
     ]);
+
+    // test code
+    // return new Promise(resolve => {
+    //   setTimeout(() => {
+    //     addToLastMessage('WARNING', 'This is a sample message');
+    //     resolve(true);
+    //   }, 1000);
+    // });
 
     const res = await fetch(`${location.origin}/wp-json/vd-react-base-theme/v1/import-location`, {
       method: 'POST',
@@ -108,45 +117,45 @@ const ImportLocationsPopup = () => {
   }, [importStarted]);
 
   return (
-    <div className="overlay">
-      <div className="popup">
-        <div className="popup-inner">
-          {importStarted && (
-            <div className="message-list">
-              {messages.map((message, index) => (
-                <div
-                  className={`message ${message.state.toLowerCase()}`}
-                  key={index}
-                >
-                  {message.text}
+    <GeneralPopup
+      popupClassName="import-locations-popup"
+      width="70%"
+      height="90%"
+    >
+      {importStarted && (
+        <div className="message-list">
+          {messages.map((message, index) => (
+            <div
+              className={`message ${message.state.toLowerCase()}`}
+              key={index}
+            >
+              {message.text}
 
-                  {message.state === 'PENDING' && (
-                    <FontAwesomeIcon
-                      style={{ position: 'relative', top: '4px', marginLeft: '5px' }}
-                      icon={faSpinner}
-                      spin
-                    />
-                  )}
-                </div>
-              ))}
+              {message.state === 'PENDING' && (
+                <FontAwesomeIcon
+                  style={{ position: 'relative', top: '4px', marginLeft: '5px' }}
+                  icon={faSpinner}
+                  spin
+                />
+              )}
             </div>
-          )}
-          {!importStarted && (
-            <>
-              <p>There are no locations in WordPress.</p>
-              <p>
-                <button
-                  className="import-button"
-                  onClick={() => setImportStarted(true)}
-                >
-                  Import Sample Data
-                </button>
-              </p>
-            </>
-          )}
+          ))}
         </div>
-      </div>
-    </div>
+      )}
+      {!importStarted && (
+        <>
+          <p>There are no locations in WordPress.</p>
+          <p>
+            <button
+              className="import-button"
+              onClick={() => setImportStarted(true)}
+            >
+              Import Sample Data
+            </button>
+          </p>
+        </>
+      )}
+    </GeneralPopup>
   );
 };
 

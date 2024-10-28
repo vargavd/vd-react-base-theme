@@ -3,7 +3,7 @@ import * as React from "react";
 
 // misc imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faList, faFileImport } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faList, faQuestion } from "@fortawesome/free-solid-svg-icons";
 
 // store imports
 import { useSelector, useDispatch } from 'react-redux';
@@ -104,8 +104,8 @@ const Header: React.FC<HeaderProps> = ({
 
         <div className="top-bar__links">
           <a className="top-bar_link__import" onClick={() => console.log('dsadasd')}>
-            <FontAwesomeIcon icon={faFileImport} />
-            <span>Import Locations</span>
+            <FontAwesomeIcon icon={faQuestion} />
+            <span>About</span>
           </a>
         </div>
       </header>

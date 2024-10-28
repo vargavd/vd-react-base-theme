@@ -1,0 +1,49 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* makes sure popup is on top */
+
+  .popup {
+    width: 50%;
+    height: 50%;
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* subtle shadow */
+    border-radius: 10px; /* optional, for rounded edges */
+    position: relative;
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .popup-inner {
+      // scrollbar
+      overflow-y: auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .close-button + .popup-inner {
+      margin-right: 40px;
+    }
+  }
+}
+
+
+

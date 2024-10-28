@@ -38,6 +38,7 @@ It has:
 - Longitude/latitude meta fields for this post type
 - A new custom REST API endpoint for filtering
 - A new custom REST API endpoint for importing locations
+- The UI does not use any framework
 
 > <small>**Note: Every setup, settings and files related to the map-example are in the `example` folder.**</small>
 
