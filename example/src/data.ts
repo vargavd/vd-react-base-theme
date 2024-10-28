@@ -679,12 +679,22 @@ export const locationInfos: LocationInfo[] = [
   },
 ];
 
+export type LocationTerm = {
+  id: number,
+  name: string,
+  taxonomy: string
+};
+
 export type LocationFromRestApi = {
-  id: string,
   title: {
     rendered: string
   },
   content: {
     rendered: string
+  },
+  _latitude: string,
+  _longitude: string,
+  _embedded: {
+    ['wp:term']: LocationTerm[][]
   }
 }

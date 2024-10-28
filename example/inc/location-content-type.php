@@ -74,3 +74,29 @@ add_action( 'init', function () {
   );
 });
 
+
+// -----------------------------------------
+// GET "ALL" LOCATIONS VIE REST API
+// TODO: This is a hack to get all locations, but won't work for large datasets. Should create a custom endpoint to handle this, according to documentation.
+add_filter( 'rest_location_query', function( $args ) {
+  $args['posts_per_page'] = 1000;
+  return $args;
+}, 10, 1);
+
+
+// -----------------------------------------
+// ADD LATITUDE AND LONGITUDE META FIELDS TO REST
+add_action( 'rest_api_init', function () {
+  register_rest_field( 'location', '_latitude', array(
+    'get_callback' => function( $location ) {
+        return get_post_meta($location['id'], '_latitude', true);
+    }
+  ));
+
+  register_rest_field( 'location', '_longitude', array(
+    'get_callback' => function( $location ) {
+        return get_post_meta($location['id'], '_longitude', true);
+    }
+  ));
+});
+

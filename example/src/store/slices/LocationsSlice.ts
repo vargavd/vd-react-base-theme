@@ -1,11 +1,5 @@
 // redux imports
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-
-// type import
-import type { LocationFromRestApi, LocationInfo } from '../../data';
-
 
 // Define an API service using a base URL
 export const locationApiSlice = createApi({
@@ -24,7 +18,7 @@ export const locationApiSlice = createApi({
         taxonomy_C_terms: string[],
         taxonomy_D_terms: string[]
       }) => {
-        const urlParams: string[] = [];
+        const urlParams = ['_embed=wp:term'];
 
         if (taxonomy_A_terms.length > 0) {
           urlParams.push(`location_taxonomy_A=${taxonomy_A_terms.join(',')}`);
@@ -40,10 +34,6 @@ export const locationApiSlice = createApi({
 
         if (taxonomy_D_terms.length > 0) {
           urlParams.push(`location_taxonomy_D=${taxonomy_D_terms.join(',')}`);
-        }
-
-        if (!urlParams.length) {
-          return '';
         }
 
         return `?${urlParams.join('&')}`;

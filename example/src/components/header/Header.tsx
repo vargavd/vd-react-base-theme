@@ -1,6 +1,5 @@
 // react imports
 import * as React from "react";
-import { useState } from "react";
 
 // misc imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,47 +14,25 @@ import { taxonomyBActions } from '../../store/slices/SelectedTaxonomyBSlice';
 import { taxonomyCActions } from '../../store/slices/SelectedTaxonomyCSlice';
 import { taxonomyDActions } from '../../store/slices/SelectedTaxonomyDSlice';
 
+// data imports
+import { LocationTerm } from "../../data";
+
 // styles
 import "./Header.scss";
 
-// data
-import { locationInfos } from "../../data";
-import ImportLocationsPopup from "../import-locations-popup/ImportLocationsPopup";
+interface HeaderProps {
+  taxonomyATerms: LocationTerm[],
+  taxonomyBTerms: LocationTerm[],
+  taxonomyCTerms: LocationTerm[],
+  taxonomyDTerms: LocationTerm[]
+}
 
-
-// load data
-const taxonomyATerms: string[] = [];
-const taxonomyBTerms: string[] = [];
-const taxonomyCTerms: string[] = [];
-const taxonomyDTerms: string[] = [];
-locationInfos.forEach(locationInfo => {
-  locationInfo.taxonomyATerms.forEach(term => {
-    if (taxonomyATerms.indexOf(term) === -1) {
-      taxonomyATerms.push(term)
-    }
-  });
-
-  locationInfo.taxonomyBTerms.forEach(term => {
-    if (taxonomyBTerms.indexOf(term) === -1) {
-      taxonomyBTerms.push(term)
-    }
-  });
-
-  locationInfo.taxonomyCTerms.forEach(term => {
-    if (taxonomyCTerms.indexOf(term) === -1) {
-      taxonomyCTerms.push(term)
-    }
-  });
-
-  locationInfo.taxonomyDTerms.forEach(term => {
-    if (taxonomyDTerms.indexOf(term) === -1) {
-      taxonomyDTerms.push(term)
-    }
-  });
-});
-
-
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({
+  taxonomyATerms,
+  taxonomyBTerms,
+  taxonomyCTerms,
+  taxonomyDTerms
+}) => {
   const selectedTaxonomyAFilters = useSelector((state: RootState) => state.selectedTaxonomyA);
   const selectedTaxonomyBFilters = useSelector((state: RootState) => state.selectedTaxonomyB);
   const selectedTaxonomyCFilters = useSelector((state: RootState) => state.selectedTaxonomyC);
@@ -64,15 +41,15 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
 
   // helper funcs
-  const renderFilter = (selectedFilters: string[], addFilterAction: (term: string) => UnknownAction, removeFilterAction: (term: string) => UnknownAction) => (term: string) => {
-    const isSelected = selectedFilters.indexOf(term) !== -1;
+  const renderFilter = (selectedFilters: string[], addFilterAction: (term: string) => UnknownAction, removeFilterAction: (term: string) => UnknownAction) => (term: LocationTerm) => {
+    const isSelected = selectedFilters.indexOf(term.name) !== -1;
     const linkClass = isSelected ? 'selected' : '';
 
     return (
-      <li key={term} onClick={() => dispatch(isSelected ? removeFilterAction(term) : addFilterAction(term))}>
+      <li key={term.id} onClick={() => dispatch(isSelected ? removeFilterAction(term.name) : addFilterAction(term.name))}>
         <a className={linkClass}>
           <FontAwesomeIcon icon={faCheck} />
-          {term}
+          {term.name}
         </a>
       </li>
     );

@@ -1,5 +1,5 @@
 // react imports
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 // misc imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,12 +12,13 @@ import { useGetLocationsQuery } from "../store/slices/LocationsSlice";
 import Header from "./header/Header";
 import Map from "./map/Map";
 import ImportLocationsPopup from "./import-locations-popup/ImportLocationsPopup";
+import { LocationFromRestApi, LocationTerm } from "../data";
 
 
 const App: React.FC = () => {
   const [firstTimeLoad, setFirstTimeLoad] = useState(true);
 
-  const { data: locations, error, isLoading: locationsLoading } = useGetLocationsQuery({
+  const { data: allLocations, error, isLoading: locationsLoading } = useGetLocationsQuery({
     taxonomy_A_terms: [],
     taxonomy_B_terms: [],
     taxonomy_C_terms: [],
@@ -27,6 +28,38 @@ const App: React.FC = () => {
   if (!locationsLoading && firstTimeLoad) {
     setFirstTimeLoad(false);
   }
+
+  const get_getAllTermsForTaxonomy = (taxonomy: string) => () => {
+    if (!allLocations?.length) return [];
+
+    const allTerms = allLocations?.map(
+      (location: LocationFromRestApi) => {
+        const termsForThisLocation = [] as LocationTerm[];
+
+        location._embedded['wp:term'].map((taxonomyTerms) => {
+          termsForThisLocation.push(...taxonomyTerms);
+        });
+
+        return termsForThisLocation;
+      }
+    ).flat(1).filter((term: any) => term.taxonomy === taxonomy);
+
+    const uniqueTerms = allTerms.filter((term: any, index: number, self: any) =>
+      index === self.findIndex((t: any) => (
+        t.id === term.id
+      ))
+    );
+
+    return uniqueTerms;
+  }
+
+  const taxonomyATerms = useMemo(get_getAllTermsForTaxonomy('location_taxonomy_A'), [allLocations?.length]);
+
+  const taxonomyBTerms = useMemo(get_getAllTermsForTaxonomy('location_taxonomy_B'), [allLocations?.length]);
+
+  const taxonomyCTerms = useMemo(get_getAllTermsForTaxonomy('location_taxonomy_C'), [allLocations?.length]);
+
+  const taxonomyDTerms = useMemo(get_getAllTermsForTaxonomy('location_taxonomy_D'), [allLocations?.length]);
 
   return (
     <>
@@ -41,14 +74,19 @@ const App: React.FC = () => {
       )}
 
       {/* THERE ARE NO LOCATIONS */}
-      {!firstTimeLoad && !locations?.length && (
+      {!firstTimeLoad && !allLocations?.length && (
         <ImportLocationsPopup />
       )}
 
       {/* LOCATIONS LOADED */}
-      {!firstTimeLoad && !!locations?.length && (
+      {!firstTimeLoad && !!allLocations?.length && (
         <>
-          <Header />
+          <Header
+            taxonomyATerms={taxonomyATerms}
+            taxonomyBTerms={taxonomyBTerms}
+            taxonomyCTerms={taxonomyCTerms}
+            taxonomyDTerms={taxonomyDTerms}
+          />
           <Map />
         </>
       )}
