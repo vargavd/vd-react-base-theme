@@ -2,6 +2,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
+// data imports
+import { LocationTerm } from '../../../data';
+
+
+
 const getTaxonomyFilterSlice = (
   sliceName: string,
   addReducerName: string,
@@ -9,13 +14,13 @@ const getTaxonomyFilterSlice = (
 ) =>
   createSlice({
     name: sliceName,
-    initialState: [] as string[],
+    initialState: [] as LocationTerm[],
     reducers: {
-      [addReducerName]: (state, action: PayloadAction<string>) => {
+      [addReducerName]: (state, action: PayloadAction<LocationTerm>) => {
         state.push(action.payload);
       },
-      [removeReducerName]: (state, action: PayloadAction<string>) => {
-        const index = state.indexOf(action.payload);
+      [removeReducerName]: (state, action: PayloadAction<LocationTerm>) => {
+        const index = state.findIndex(item => item.id === action.payload.id);
 
         if (index !== -1) {
           state.splice(index, 1);

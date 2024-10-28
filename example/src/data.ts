@@ -686,6 +686,7 @@ export type LocationTerm = {
 };
 
 export type LocationFromRestApi = {
+  id: string,
   title: {
     rendered: string
   },

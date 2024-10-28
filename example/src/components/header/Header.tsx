@@ -44,12 +44,12 @@ const Header: React.FC<HeaderProps> = ({
   const dispatch = useDispatch();
 
   // helper funcs
-  const renderFilter = (selectedFilters: string[], addFilterAction: (term: string) => UnknownAction, removeFilterAction: (term: string) => UnknownAction) => (term: LocationTerm) => {
-    const isSelected = selectedFilters.indexOf(term.name) !== -1;
+  const renderFilter = (selectedFilters: LocationTerm[], addFilterAction: (_: LocationTerm) => UnknownAction, removeFilterAction: (_: LocationTerm) => UnknownAction) => (term: LocationTerm) => {
+    const isSelected = selectedFilters.findIndex(item => item.id === term.id) !== -1;
     const linkClass = isSelected ? 'selected' : '';
 
     return (
-      <li key={term.id} onClick={() => dispatch(isSelected ? removeFilterAction(term.name) : addFilterAction(term.name))}>
+      <li key={term.id} onClick={() => dispatch(isSelected ? removeFilterAction(term) : addFilterAction(term))}>
         <a className={linkClass}>
           <FontAwesomeIcon icon={faCheck} />
           {term.name}
@@ -120,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({
           height="50%"
           onClose={() => setShowAboutPopup(false)}
         >
-          It is an Map webapplication with filterable points of interests, built with React, Redux, TypeScript, and Webpack, integrated into a WordPress theme.
+          It is a Map webapplication with filterable points of interests, built with React, Redux, TypeScript, and Webpack, integrated into a WordPress theme.
         </GeneralPopup>
       )}
     </>
