@@ -116,11 +116,19 @@ const Header: React.FC<HeaderProps> = ({
       {showAboutPopup && (
         <GeneralPopup
           popupClassName="about-popup"
-          width="50%"
-          height="50%"
+          width="30%"
+          height="40%"
           onClose={() => setShowAboutPopup(false)}
         >
-          It is a Map webapplication with filterable points of interests, built with React, Redux, TypeScript, and Webpack, integrated into a WordPress theme.
+          <h2>
+            Mapbox map with filterable markers
+          </h2>
+
+          <p>
+            It is built with React, Redux, TypeScript, and a custom Webpack configuration, inside a WordPress theme.
+          </p>
+
+          <p>The content (markers and taxonomies) is coming from WordPress with the default REST endpoint. Importing the content used a custom REST API endpoint.</p>
         </GeneralPopup>
       )}
     </>
