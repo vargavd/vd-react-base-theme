@@ -1,9 +1,10 @@
 // react imports
-import * as React from "react";
+import { useState } from "react";
 
 // misc imports
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faList, faQuestion } from "@fortawesome/free-solid-svg-icons";
+import GeneralPopup from "../general-popup/GeneralPopup";
 
 // store imports
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,6 +34,8 @@ const Header: React.FC<HeaderProps> = ({
   taxonomyCTerms,
   taxonomyDTerms
 }) => {
+  const [showAboutPopup, setShowAboutPopup] = useState(false);
+
   const selectedTaxonomyAFilters = useSelector((state: RootState) => state.selectedTaxonomyA);
   const selectedTaxonomyBFilters = useSelector((state: RootState) => state.selectedTaxonomyB);
   const selectedTaxonomyCFilters = useSelector((state: RootState) => state.selectedTaxonomyC);
@@ -103,12 +106,23 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="top-bar__links">
-          <a className="top-bar_link__import" onClick={() => console.log('dsadasd')}>
+          <a className="top-bar_link__about" onClick={() => setShowAboutPopup(true)}>
             <FontAwesomeIcon icon={faQuestion} />
             <span>About</span>
           </a>
         </div>
       </header>
+
+      {showAboutPopup && (
+        <GeneralPopup
+          popupClassName="about-popup"
+          width="50%"
+          height="50%"
+          onClose={() => setShowAboutPopup(false)}
+        >
+          It is an Map webapplication with filterable points of interests, built with React, Redux, TypeScript, and Webpack, integrated into a WordPress theme.
+        </GeneralPopup>
+      )}
     </>
   );
 };

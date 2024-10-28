@@ -34,7 +34,10 @@ const GeneralPopup: React.FC<{
     }
 
     return (
-      <div className="overlay">
+      <div
+        className="overlay"
+        onClick={(e) => (e.target === e.currentTarget && onClose) && onClose()}
+      >
         <div
           className={"popup" + (popupClassName ? ` ${popupClassName}` : '')}
           style={getPopupStyles()}
