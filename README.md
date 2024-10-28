@@ -11,11 +11,7 @@ This theme has the groundwork for turning a WP website into a React-based SPA. T
 
 The main idea is to use the WordPress installation for the database and dashboard, while a React-based app lives in the theme. Communication is done through REST API.
 
-## Uses/Includes
-- A custom webpack configuration for JSX, TS, SCSS (for now) compilation.
-- Custom proxy reload with `browser-sync`
-- `React`, `Redux Toolkit`
-- `TypeScript` and `Tailwind` integrated
+The repository also includes a Mapbox example.
 
 ## Technical Details
 - Default WP classes are not printed
@@ -32,13 +28,23 @@ The main idea is to use the WordPress installation for the database and dashboar
 
 ## Included Example
 As an example, there is an Map solution with filterable points of interests, built with Mapbox. 
-You will need a [Mapbox access token](https://docs.mapbox.com/help/getting-started/access-tokens/) inside an .env file for a working example.
-It has:
-- A new post type: Points
-- Longitude/latitude meta fields for this post type
-- A new custom REST API endpoint for filtering
+You will need a [Mapbox access token](https://docs.mapbox.com/help/getting-started/access-tokens/) inside an .env file for running the example.
+
+> Note: every content and taxonomy used in the example is imported during the first time the website loads. It has a separate popup for this.
+
+#### About:
+- A new post type: Locations
+- Longitude/latitude meta fields added for Locations, with a custom metabox
+- It registers 4 additional taxonomy for Locations
+- Filtering is done with the default WordPress REST API endpoint
 - A new custom REST API endpoint for importing locations
-- The UI does not use any framework
+
+#### Technical Details
+- A custom webpack configuration for JSX, TS, SCSS (for now) compilation.
+- Custom proxy reload with `browser-sync`
+- `React`, `Redux Toolkit`
+- `TypeScript` integrated
+- `Tailwind` is planned
 
 > <small>**Note: Every setup, settings and files related to the map-example are in the `example` folder.**</small>
 
