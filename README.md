@@ -1,4 +1,4 @@
-# *`Please note that the theme is actively work in progress. Below is the description of my final goal.`*
+# *`About the Map webapp - see below.`*
 
 ---
 ---
